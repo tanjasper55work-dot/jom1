@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Vermillion Room — Members' Tables</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --felt-dark:#050f24;
+    --felt:#0a2350;
+    --felt-light:#123a78;
+    --ink:#070d18;
+    --gold:#e8c168;
+    --gold-bright:#f6dc9a;
+    --gold-deep:#a97c2f;
+    --cream:#f3ead4;
+    --cream-dim:#c7d2e4;
+    --crimson:#8f2a3f;
+    --crimson-bright:#c23b52;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--felt-dark);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+  }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    background:
+      radial-gradient(ellipse 900px 700px at 82% 45%, rgba(233,193,104,0.10), transparent 60%),
+      radial-gradient(ellipse 1400px 900px at 15% 50%, var(--felt-light), var(--felt) 55%, var(--felt-dark) 100%);
+    isolation:isolate;
+  }
+
+  /* subtle suit watermark texture */
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(232,193,104,0.035) 0, transparent 3%),
+      radial-gradient(circle at 30% 70%, rgba(232,193,104,0.03) 0, transparent 3%),
+      radial-gradient(circle at 60% 15%, rgba(232,193,104,0.03) 0, transparent 3%),
+      radial-gradient(circle at 80% 80%, rgba(232,193,104,0.035) 0, transparent 3%),
+      radial-gradient(circle at 45% 45%, rgba(232,193,104,0.02) 0, transparent 3%);
+    background-size: 100% 100%;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* faint diagonal felt weave */
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image: repeating-linear-gradient(135deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 5px);
+    mix-blend-mode:overlay;
+    opacity:0.5;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:1400px;
+    margin:0 auto;
+    padding:0 clamp(24px,6vw,80px);
+    display:grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap:40px;
+    align-items:center;
+  }
+
+  /* ---------- LEFT COLUMN ---------- */
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--gold);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    margin-bottom:26px;
+    opacity:0;
+    animation: fadeUp 0.7s ease 0.1s forwards;
+  }
+  .eyebrow .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--crimson-bright);
+    box-shadow:0 0 8px var(--crimson-bright);
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+
+  h1.headline{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-optical-sizing:auto;
+    font-size:clamp(46px, 5.6vw, 84px);
+    line-height:0.96;
+    margin:0 0 26px 0;
+    letter-spacing:-0.01em;
+    opacity:0;
+    animation: fadeUp 0.8s ease 0.22s forwards;
+  }
+  h1.headline .line{ display:block; }
+  h1.headline .foil{
+    background: linear-gradient(100deg, var(--gold-deep) 10%, var(--gold-bright) 35%, var(--gold) 50%, var(--gold-bright) 65%, var(--gold-deep) 90%);
+    background-size:250% 100%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation: shimmer 5s linear infinite;
+    font-style:italic;
+    font-weight:500;
+  }
+  h1.headline .cream{ color:var(--cream); }
+
+  .sub{
+    font-size:16.5px;
+    line-height:1.65;
+    color:var(--cream-dim);
+    max-width:480px;
+    margin:0 0 36px 0;
+    opacity:0;
+    animation: fadeUp 0.8s ease 0.36s forwards;
+  }
+  .sub strong{ color:var(--cream); font-weight:600; }
+
+  .cta-row{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    margin-bottom:44px;
+    opacity:0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+  a.btn-primary{
+    display:inline-block;
+    text-decoration:none;
+  }
+  .btn-primary{
+    position:relative;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:16.5px;
+    letter-spacing:0.01em;
+    color:var(--ink);
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, var(--gold-deep));
+    border:none;
+    padding:16px 34px;
+    border-radius:3px;
+    cursor:pointer;
+    box-shadow: 0 10px 30px -8px rgba(232,193,104,0.55), inset 0 1px 0 rgba(255,255,255,0.5);
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow: 0 14px 34px -6px rgba(232,193,104,0.7), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  .btn-primary .arrow{
+    display:inline-block;
+    margin-left:6px;
+    transform:translateY(-1px);
+    transition:transform 0.25s ease;
+  }
+  .btn-primary:hover .arrow{
+    transform:translateX(4px) translateY(-1px);
+  }
+  .btn-secondary{
+    background:transparent;
+    background-image:none;
+    color:var(--gold-bright);
+    border:1.5px solid var(--gold);
+    box-shadow:none;
+  }
+  .btn-secondary:hover{
+    background:linear-gradient(180deg, rgba(232,193,104,0.16), rgba(232,193,104,0.06));
+    box-shadow:0 10px 26px -10px rgba(232,193,104,0.35);
+  }
+
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes shimmer{
+    to{ background-position:-250% 0; }
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; } 50%{ opacity:0.35; }
+  }
+
+  /* ---------- RIGHT COLUMN — TABLEAU ---------- */
+  .tableau{
+    position:relative;
+    height:600px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .coin-rain{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    z-index:1;
+    pointer-events:none;
+    perspective:500px;
+  }
+  .coin{
+    position:absolute;
+    top:-60px;
+    aspect-ratio:1/1;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 34% 28%, var(--gold-bright), var(--gold) 52%, var(--gold-deep) 100%);
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.35),
+      inset 0 0 0 4px rgba(169,124,47,0.5),
+      0 4px 10px rgba(0,0,0,0.45);
+    animation: coinFall linear infinite;
+    will-change: transform, opacity;
+  }
+  .coin::after{
+    content:"$";
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:55%;
+    color:rgba(169,124,47,0.75);
+  }
+  @keyframes coinFall{
+    0%{ transform:translateY(-60px) rotateY(0deg); opacity:0; }
+    8%{ opacity:1; }
+    90%{ opacity:1; }
+    100%{ transform:translateY(660px) rotateY(900deg); opacity:0; }
+  }
+
+  /* slot machine */
+  .machine{
+    position:relative;
+    z-index:2;
+    width:420px;
+    opacity:0;
+    animation: fadeUp 0.9s ease 0.35s forwards;
+    filter: drop-shadow(0 34px 60px rgba(0,0,0,0.6));
+  }
+
+  .lever{
+    position:absolute;
+    right:-30px; top:14%;
+    width:12px; height:160px;
+    background:linear-gradient(90deg,#efefef,#9a9a9a 45%,#efefef);
+    border-radius:8px;
+    transform-origin:top center;
+    animation: leverPull 3.6s ease-in-out infinite;
+    box-shadow:0 0 0 1px rgba(0,0,0,0.3);
+  }
+  .lever-knob{
+    position:absolute; top:-22px; left:50%; transform:translateX(-50%);
+    width:38px; height:38px; border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, #ff8a9c, var(--crimson-bright) 45%, var(--crimson) 78%, #440f1c);
+    box-shadow:0 8px 16px rgba(0,0,0,0.55), inset 0 2px 4px rgba(255,255,255,0.4);
+  }
+  @keyframes leverPull{
+    0%,72%{ transform:rotate(0deg); }
+    80%{ transform:rotate(24deg); }
+    92%,100%{ transform:rotate(0deg); }
+  }
+
+  /* marquee crown with chase lights */
+  .marquee{
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, var(--gold-deep));
+    border-radius:20px 20px 0 0;
+    padding:9px 14px 0;
+    position:relative;
+    box-shadow:inset 0 2px 4px rgba(255,255,255,0.6), 0 -2px 0 rgba(0,0,0,0.15);
+  }
+  .bulb-row{
+    display:flex;
+    justify-content:space-between;
+    padding:0 4px;
+  }
+  .bulb-row .bulb{
+    width:6px;height:6px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff7dd, var(--gold-bright) 55%, var(--gold-deep));
+    box-shadow:0 0 5px rgba(255,236,170,0.4);
+    animation:chase 1.4s linear infinite;
+  }
+  .bulb-row .bulb:nth-child(3n+1){ animation-delay:0s; }
+  .bulb-row .bulb:nth-child(3n+2){ animation-delay:0.16s; }
+  .bulb-row .bulb:nth-child(3n){ animation-delay:0.32s; }
+  @keyframes chase{
+    0%,100%{ opacity:0.25; box-shadow:0 0 3px rgba(255,236,170,0.2); }
+    50%{ opacity:1; box-shadow:0 0 9px rgba(255,236,170,0.9); }
+  }
+  .marquee-title{
+    text-align:center;
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-style:italic;
+    font-size:19px;
+    letter-spacing:0.04em;
+    color:var(--ink);
+    padding:6px 0 10px;
+    text-shadow:0 1px 0 rgba(255,255,255,0.4);
+  }
+
+  .cab-body{
+    position:relative;
+    background:
+      linear-gradient(160deg, #1c1c17 0%, var(--ink) 55%, #14140f 100%);
+    border:3px solid var(--gold-deep);
+    border-top:none;
+    border-radius:0 0 14px 14px;
+    padding:26px 26px 26px;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(232,193,104,0.15);
+  }
+  /* chrome side rails */
+  .cab-body::before, .cab-body::after{
+    content:"";
+    position:absolute;
+    top:0; bottom:0;
+    width:10px;
+    background:linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 60%);
+  }
+  .cab-body::before{ left:0; border-radius:0 0 0 14px; }
+  .cab-body::after{ right:0; transform:scaleX(-1); border-radius:0 0 0 14px; }
+
+  .screen-frame{
+    position:relative;
+    padding:8px;
+    border-radius:12px;
+    background:linear-gradient(155deg, var(--gold-bright), var(--gold-deep) 70%);
+    box-shadow:0 0 22px rgba(232,193,104,0.35), inset 0 0 0 1px rgba(255,255,255,0.4);
+    animation: frameGlow 2.6s ease-in-out infinite;
+  }
+  @keyframes frameGlow{
+    0%,100%{ box-shadow:0 0 16px rgba(232,193,104,0.25), inset 0 0 0 1px rgba(255,255,255,0.4); }
+    50%{ box-shadow:0 0 30px rgba(232,193,104,0.55), inset 0 0 0 1px rgba(255,255,255,0.5); }
+  }
+  .screen{
+    display:flex;
+    gap:8px;
+    background:linear-gradient(180deg,#050504,#0d0d0a);
+    border:2px solid #000;
+    border-radius:8px;
+    padding:14px;
+    box-shadow:inset 0 0 28px rgba(0,0,0,0.85);
+    position:relative;
+  }
+  /* payline across the reels */
+  .payline{
+    position:absolute;
+    left:6px; right:6px; top:50%;
+    height:2px;
+    background:linear-gradient(90deg, transparent, var(--crimson-bright) 15%, var(--crimson-bright) 85%, transparent);
+    box-shadow:0 0 8px var(--crimson-bright);
+    transform:translateY(-50%);
+    z-index:2;
+    pointer-events:none;
+  }
+  .payline::before, .payline::after{
+    content:"";
+    position:absolute; top:50%; transform:translateY(-50%);
+    border:5px solid transparent;
+  }
+  .payline::before{ left:-9px; border-right-color:var(--crimson-bright); }
+  .payline::after{ right:-9px; border-left-color:var(--crimson-bright); }
+
+  .reel{
+    flex:1;
+    aspect-ratio:1/1.15;
+    background:linear-gradient(180deg,#fbf4de,#e9dcb8);
+    border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.4);
+    overflow:hidden;
+    position:relative;
+  }
+  .reel::before{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0.18), transparent 20%, transparent 80%, rgba(0,0,0,0.18));
+    pointer-events:none;
+  }
+  .reel .digit{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:58px;
+    background:linear-gradient(180deg, var(--gold-deep), var(--crimson) 130%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation: reelSettle 3.6s cubic-bezier(.2,.85,.25,1) infinite;
+  }
+  .reel:nth-child(2) .digit{ animation-delay:0.12s; }
+  .reel:nth-child(3) .digit{ animation-delay:0.24s; }
+  @keyframes reelSettle{
+    0%{ transform:translateY(0); }
+    55%{ transform:translateY(-6px); }
+    62%{ transform:translateY(4px); }
+    70%,100%{ transform:translateY(0); }
+  }
+
+  .jackpot-strip{
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.28em;
+    color:var(--gold);
+    margin-top:16px;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+
+  .cab-foot{
+    display:flex;
+    justify-content:space-between;
+    margin-top:16px;
+    padding:0 4px;
+  }
+  .foot-lamp{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 8px var(--gold);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  .foot-lamp:nth-child(odd){ animation-delay:0.3s; }
+
+  /* stand / base shadow beneath cabinet */
+  .machine-base{
+    height:14px;
+    margin:0 10px;
+    background:radial-gradient(ellipse at center, rgba(232,193,104,0.35), transparent 75%);
+    filter:blur(2px);
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 980px){
+    .wrap{ grid-template-columns:1fr; padding-top:100px; padding-bottom:60px; }
+    .tableau{ height:440px; order:-1; margin-bottom:20px; }
+    .machine{ width:300px; }
+    .marquee-title{ font-size:15px; }
+    h1.headline{ font-size:clamp(38px,9vw,58px); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+
+    <!-- LEFT -->
+    <div class="copy">
+      <div class="eyebrow"><span class="dot"></span> Members' tables — open 24 hours</div>
+
+      <h1 class="headline">
+        <span class="line cream">155% Welcome Bonus</span>
+        <span class="line foil">Free Kredit RM555</span>
+      </h1>
+
+      <p class="sub">
+        Pelbagai Slot Slot, <strong>Mega888</strong>, <strong>Pussy888</strong>, <strong>918Kiss APK</strong>,
+        Pragmatic, Hacksaw, Live22, UUSlot, Joker, Jili, EpicWin,
+        Playtech, No Limit City, Habanero, NextSpin.
+        <strong>24JAM/7</strong> Customer Service
+      </p>
+
+      <div class="cta-row">
+        <a href="https://www.jom55.com" class="btn-primary" target="_blank" rel="noopener">Daftar Sekarang <span class="arrow">›</span></a>
+        <a href="https://www.zenith-go.fun" class="btn-primary btn-secondary" target="_blank" rel="noopener">Misi dpt Free <span class="arrow">›</span></a>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="tableau">
+
+      <div class="coin-rain">
+        <div class="coin" style="left:3%;  width:30px; animation-duration:3.4s; animation-delay:-0.2s;"></div>
+        <div class="coin" style="left:10%; width:22px; animation-duration:2.6s; animation-delay:-1.4s;"></div>
+        <div class="coin" style="left:17%; width:36px; animation-duration:4.1s; animation-delay:-2.6s;"></div>
+        <div class="coin" style="left:24%; width:26px; animation-duration:3.0s; animation-delay:-0.8s;"></div>
+        <div class="coin" style="left:31%; width:32px; animation-duration:3.7s; animation-delay:-3.1s;"></div>
+        <div class="coin" style="left:38%; width:20px; animation-duration:2.4s; animation-delay:-1.9s;"></div>
+        <div class="coin" style="left:45%; width:28px; animation-duration:3.3s; animation-delay:-0.4s;"></div>
+        <div class="coin" style="left:52%; width:34px; animation-duration:3.9s; animation-delay:-2.2s;"></div>
+        <div class="coin" style="left:59%; width:24px; animation-duration:2.8s; animation-delay:-1.1s;"></div>
+        <div class="coin" style="left:66%; width:30px; animation-duration:3.5s; animation-delay:-3.4s;"></div>
+        <div class="coin" style="left:73%; width:22px; animation-duration:2.5s; animation-delay:-0.6s;"></div>
+        <div class="coin" style="left:80%; width:36px; animation-duration:4.0s; animation-delay:-2.8s;"></div>
+        <div class="coin" style="left:87%; width:26px; animation-duration:3.1s; animation-delay:-1.6s;"></div>
+        <div class="coin" style="left:94%; width:20px; animation-duration:2.7s; animation-delay:-0.1s;"></div>
+        <div class="coin" style="left:7%;  width:24px; animation-duration:2.9s; animation-delay:-3.7s;"></div>
+        <div class="coin" style="left:28%; width:20px; animation-duration:2.3s; animation-delay:-2.0s;"></div>
+        <div class="coin" style="left:49%; width:26px; animation-duration:3.2s; animation-delay:-1.3s;"></div>
+        <div class="coin" style="left:70%; width:32px; animation-duration:3.8s; animation-delay:-0.9s;"></div>
+        <div class="coin" style="left:91%; width:24px; animation-duration:2.6s; animation-delay:-2.5s;"></div>
+      </div>
+
+      <div class="machine">
+        <div class="lever">
+          <div class="lever-knob"></div>
+        </div>
+        <div class="marquee">
+          <div class="bulb-row">
+            <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+            <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+            <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+          </div>
+          <div class="marquee-title">Malaysia JOM55</div>
+        </div>
+        <div class="cab-body">
+          <div class="screen-frame">
+            <div class="screen">
+              <div class="payline"></div>
+              <div class="reel"><span class="digit">7</span></div>
+              <div class="reel"><span class="digit">7</span></div>
+              <div class="reel"><span class="digit">7</span></div>
+            </div>
+          </div>
+          <div class="jackpot-strip">✦ JACKPOT ✦</div>
+          <div class="cab-foot">
+            <span class="foot-lamp"></span><span class="foot-lamp"></span><span class="foot-lamp"></span>
+            <span class="foot-lamp"></span><span class="foot-lamp"></span><span class="foot-lamp"></span>
+          </div>
+        </div>
+        <div class="machine-base"></div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+<script>
+</script>
+
+</body>
+</html>
